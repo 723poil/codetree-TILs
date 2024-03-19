@@ -200,4 +200,6 @@ def solution():
         else:
             print(cus_cnt, sushi_cnt)
 
+        print(command, cus_cnt, sushi_cnt)
+
 solution()
