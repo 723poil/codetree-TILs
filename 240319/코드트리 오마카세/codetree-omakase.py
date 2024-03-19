@@ -152,6 +152,7 @@ def find_customer(command_t: list, L: int):
         if sushi_t < c_t:
             gap_t = c_t - sushi_t
 
+
             expect_x = (gap_t + sushi_x) % L
 
             able_time = cus_seat[sushi_name] - expect_x
@@ -162,13 +163,13 @@ def find_customer(command_t: list, L: int):
 
         # 2. 사람이 스시 전에 들어와 있을 때
         else:
-            able_time = cus_seat[sushi_name] - c_t
+            able_time = cus_seat[sushi_name] - sushi_x
 
             if able_time < 0:
                 able_time += L
 
             able_time += sushi_t
-        
+
         commands.put((able_time, 101, sushi_name))
 
 def solution():
@@ -199,7 +200,5 @@ def solution():
             cus_cnt += 1
         else:
             print(cus_cnt, sushi_cnt)
-
-        print(command, cus_cnt, sushi_cnt)
 
 solution()
