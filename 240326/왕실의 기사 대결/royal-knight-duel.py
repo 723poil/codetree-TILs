@@ -123,7 +123,8 @@ def command_knight(knight: int, dir: int):
     
     for cc in command:
         kk = cc[1]
-        move_knight(True, kk, dir)
+        if knights.get(kk):
+            move_knight(True, kk, dir)
 
 def solution():    
     global L, N, Q, chess, knights_map, knights
