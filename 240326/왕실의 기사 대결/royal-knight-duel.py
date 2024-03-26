@@ -6,9 +6,9 @@ dd = [(-1, 0), (0, 1), (1, 0), (0, -1)]
 # L - 체스판 크기, N - 기사 수, Q - 왕의 명령
 L, N, Q = map(int, input().split())
 
-chess = [[-1 for _ in range(L+2)]]
+chess = [[-1 for _ in range(L+1)]]
 knights = dict()
-knights_map = [[0 for _ in range(L+2)] for _ in range(L+2)]
+knights_map = [[0 for _ in range(L+1)] for _ in range(L+1)]
 
 # 초기 기사들의 위치 지정
 def set_knight(left_up: tuple, right_down: tuple, knight: int):
@@ -41,7 +41,7 @@ def check_map(left_up: tuple, right_down: tuple, dir: int):
     
     for dy in range(sy, ey):
         for dx in range(sx, ex):
-            if chess[dy][dx] == 2 or not (0 < dy <= L and 0 < dx <= L):
+            if not (0 < dy <= L and 0 < dx <= L) or chess[dy][dx] == 2:
                 return [(2, 0)]
             
             if knights_map[dy][dx] != 0:
@@ -77,16 +77,14 @@ def move_knight(isAttacked: bool, knight: int, dir: int):
     left_up = knights[knight][0]
     right_down = knights[knight][1]
     k = knights[knight][2]
-    demage = knights[knight][3]
 
     dmg = 0
 
     for dy in range(left_up[0], right_down[0]+1):
         for dx in range(left_up[1], right_down[1]+1):
-            if knights_map[dy][dx] != knight:
-                continue
+            if knights_map[dy][dx] == knight:
+                knights_map[dy][dx] = 0
             
-            knights_map[dy][dx] = 0
             knights_map[dy+dd[dir][0]][dx+dd[dir][1]] = knight
 
             if chess[dy+dd[dir][0]][dx+dd[dir][1]] == 1:
@@ -112,12 +110,13 @@ def command_knight(knight: int, dir: int):
     left_up = knights[knight][0]
     right_down = knights[knight][1]
     k = knights[knight][2]
-    demage = knights[knight][3]
+    damage = knights[knight][3]
 
     command = check_map(left_up, right_down, dir)
 
     if len(command) == 0:
         move_knight(False, knight, dir)
+        
         return
     elif command[0][0] == 2:
         return
@@ -132,9 +131,7 @@ def solution():
     for _ in range(L):
         cs = list(map(int, input().split()))
 
-        chess.append([-1] + cs + [-1])
-
-    chess.append([-1 for _ in range(L+2)])
+        chess.append([-1] + cs)
 
     for i in range(1, N+1):
         r, c, h, w, k = map(int, input().split())
