@@ -114,12 +114,10 @@ def command_knight(knight: int, dir: int):
 
     command = check_map(left_up, right_down, dir)
 
-    if len(command) == 0:
-        move_knight(False, knight, dir)
-        
+    if len(command) != 0 and command[0][0] == 2:
         return
-    elif command[0][0] == 2:
-        return
+
+    move_knight(False, knight, dir)
     
     for cc in command:
         kk = cc[1]
