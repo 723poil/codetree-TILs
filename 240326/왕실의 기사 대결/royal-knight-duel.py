@@ -59,10 +59,12 @@ def check_map(left_up: tuple, right_down: tuple, dir: int):
         klu = knights[knight][0]
         krd = knights[knight][1]
 
-        rr += check_map(klu, krd, dir)
+        rrr = check_map(klu, krd, dir)
 
-        if len(rr) != 0 and rr[0][0] == 2:
+        if len(rrr) != 0 and rrr[0][0] == 2:
             return [(2, 0)]
+
+        rr += rrr
         
         i+= 1
 
@@ -108,11 +110,9 @@ def move_knight(isAttacked: bool, knight: int, dir: int):
 # 왕의 명령 수행
 def command_knight(knight: int, dir: int):
     global dd, chess, knights_map, knights
-
+        
     left_up = knights[knight][0]
     right_down = knights[knight][1]
-    k = knights[knight][2]
-    damage = knights[knight][3]
 
     command = check_map(left_up, right_down, dir)
 
@@ -124,11 +124,6 @@ def command_knight(knight: int, dir: int):
     for cc in command:
         kk = cc[1]
         move_knight(True, kk, dir)
-    
-    # if len(command) > 0:
-    #     print("------" + str(knight) + ", " + str(dir) + "-------")
-    #     for mm in knights_map[1:]:
-    #         print(mm[1:])
 
 def solution():    
     global L, N, Q, chess, knights_map, knights
