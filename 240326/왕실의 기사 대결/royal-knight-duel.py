@@ -123,8 +123,12 @@ def command_knight(knight: int, dir: int):
     
     for cc in command:
         kk = cc[1]
-        if knights.get(kk):
-            move_knight(True, kk, dir)
+        move_knight(True, kk, dir)
+    
+    # if len(command) > 0:
+    #     print("------" + str(knight) + ", " + str(dir) + "-------")
+    #     for mm in knights_map[1:]:
+    #         print(mm[1:])
 
 def solution():    
     global L, N, Q, chess, knights_map, knights
