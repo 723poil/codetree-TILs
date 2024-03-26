@@ -84,7 +84,9 @@ def move_knight(isAttacked: bool, knight: int, dir: int):
         for dx in range(left_up[1], right_down[1]+1):
             if knights_map[dy][dx] == knight:
                 knights_map[dy][dx] = 0
-            
+
+    for dy in range(left_up[0], right_down[0]+1):
+        for dx in range(left_up[1], right_down[1]+1):
             knights_map[dy+dd[dir][0]][dx+dd[dir][1]] = knight
 
             if chess[dy+dd[dir][0]][dx+dd[dir][1]] == 1:
