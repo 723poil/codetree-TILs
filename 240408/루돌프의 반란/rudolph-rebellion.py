@@ -95,11 +95,11 @@ def find_santa_dir(rudol: list, santa: list, boards: list, p: int) -> list:
              fl.append([r[i], c[i], distance(rudol, expected_santa)])
         if diff_c != 0 and c[i] == diff_c and boards[expected_santa[0]][expected_santa[1]] <= 0:
             fl.append([r[i], c[i], distance(rudol, expected_santa)])
-    
+
     if len(fl) == 0:
         return [0, 0]
 
-    fl.sort(key= lambda x: (x[2], min(r.index(x[0]), c.index(x[1]))))
+    fl.sort(key= lambda x: (x[2], r.index(x[0]) + c.index(x[1])))
 
     return [fl[0][0], fl[0][1]]
 
@@ -111,10 +111,10 @@ def move_santa(rudol: list, santa: int, santas: list, alive_santas: list, boards
     
     opt_dir = find_santa_dir(rudol, santas[santa][2], boards, santa)
 
-    boards[santas[santa][2][0]][santas[santa][2][1]] = -1
-
     if opt_dir[0] == 0 and opt_dir[1] == 0:
         return
+
+    boards[santas[santa][2][0]][santas[santa][2][1]] = -1
 
     santas[santa][2] = [santas[santa][2][0] + opt_dir[0], santas[santa][2][1] + opt_dir[1]]
     santa_cur = santas[santa][2]
@@ -132,11 +132,12 @@ def conflict(santa: int, dis: int, dir: list, alive_santas: list, santas: list, 
     real_dis = [dir[0] * dis, dir[1] * dis]
 
     # 밀려나는 것은 포물선 모양을 그리며 밀려나는 것이기 때문에 이동하는 도중에 충돌이 일어나지는 않고 정확히 원하는 위치에 도달하게 됩니다.
-    santas[santa][2] = [santas[santa][2][0] + real_dis[0], santas[santa][2][1] + real_dis[1]]
-
-    if not (0 < santas[santa][2][0] <= N and 0 < santas[santa][2][1] <= N):
+    if not (0 < santas[santa][2][0] + real_dis[0] <= N and 0 < santas[santa][2][1] + real_dis[1] <= N):
         alive_santas[santa] = False
+        boards[santas[santa][2][0]][santas[santa][2][1]] = -1
         return
+
+    santas[santa][2] = [santas[santa][2][0] + real_dis[0], santas[santa][2][1] + real_dis[1]]
     
     # 만약 밀려난 칸에 다른 산타가 있는 경우 상호작용이 발생
     # 산타는 충돌 후 착지하게 되는 칸에 다른 산타가 있다면 그 산타는 1칸 해당 방향으로 밀려나게 됩니다.
@@ -145,7 +146,6 @@ def conflict(santa: int, dis: int, dir: list, alive_santas: list, santas: list, 
     if another_santa != -1:
         # 현재가 k번째 턴이었다면, (k+1)번째 턴까지 기절하게 되어 (k+2)번째 턴부터 다시 정상상태가 됩니다.
         # 기절한 도중 충돌이나 상호작용으로 인해 밀려날 수는 있습니다.
-        # santas[another_santa][3] = K+1
         conflict(another_santa, 1, dir, alive_santas, santas, boards, K, N)
 
     boards[santas[santa][2][0]][santas[santa][2][1]] = santa
@@ -179,8 +179,6 @@ if __name__ == "__main__":
         # 루돌프 움직이기
         move_rudol(rudol, santas, alive_santas, boards, k, C, N)
 
-        
-
         # 산타 움직이기
         for p in range(1, P+1):
             # 밖에 있는 산타들
@@ -192,7 +190,7 @@ if __name__ == "__main__":
                 continue
 
             # 산타 움직이기
-            move_santa(rudol, p, santas, alive_santas, boards, k, C, N)
+            move_santa(rudol, p, santas, alive_santas, boards, k, D, N)
 
         # 매 턴 이후 아직 탈락하지 않은 산타들에게는 1점씩을 추가로 부여합니다.
         alive = alive_santa_one_point(P, alive_santas, santas)
