@@ -109,7 +109,7 @@ def rotate_real(miro: list, square: list, exit: list, runners: list):
             miro[rr + diff_r][cc + diff_c] = temp_miro[rr][cc] 
     
     for m in range(len(runners)):
-        if diff_r <= runners[m][0] <= square[0] and diff_c <= runners[m][1] <= square[1]:
+        if diff_r < runners[m][0] <= square[0] and diff_c < runners[m][1] <= square[1]:
             tmr = runners[m][0] - diff_r
             tmc = runners[m][1] - diff_c
 
