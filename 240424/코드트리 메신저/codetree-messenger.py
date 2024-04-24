@@ -9,9 +9,11 @@ def can_alarms(node: int, depth: int = 1)-> int:
     # 2. setup설정이 꺼져있으면 넘기기
     # 3. 세기를 확인하고 가능하면 + 1
     for i, p in enumerate(tree):
-        if p == node and alarms[i] and authorities[i] >= depth:
-            count += 1
+        if p == node and alarms[i]:
             count += can_alarms(i+1, depth + 1)
+
+            if authorities[i] >= depth:
+                count += 1
 
     return count
 
