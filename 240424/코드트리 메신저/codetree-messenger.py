@@ -16,7 +16,6 @@ def can_alarms(node: int, depth: int = 1)-> int:
             count += can_alarms(child, depth + 1)
 
             if authorities[child-1] >= depth:
-                # print(node, child, alarms[child-1])
                 count += 1
 
     return count
@@ -56,12 +55,6 @@ if __name__ == '__main__':
             a = commands[1]
             b = commands[2]
 
-            a_index = tree_dict[tree[a-1]].index(a)
-            b_index = tree_dict[tree[b-1]].index(b)
-
-            # print(11111, tree_dict[tree[a-1]], tree_dict[tree[b-1]])
-            # print(11111, alarms[a-1], alarms[b-1])
-
             temp = tree[a-1]
             tree[a-1] = tree[b-1]
             tree[b-1] = temp
@@ -71,9 +64,6 @@ if __name__ == '__main__':
             
             tree_dict[tree[a-1]][b_index] = a
             tree_dict[tree[b-1]][a_index] = b
-
-            # print(11111, a, tree_dict[tree[a-1]], tree_dict[tree[b-1]])
-            # print(11111, a, alarms[a-1], alarms[b-1])
 
         elif command == 500:
             print(can_alarms(commands[1]))
