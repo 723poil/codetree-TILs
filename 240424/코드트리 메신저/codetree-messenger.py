@@ -1,22 +1,36 @@
 from sys import stdin
+from collections import deque
 
 input = stdin.readline
 
-def can_alarms(node: int, depth: int = 1)-> int:
+def can_alarms(node: int)-> int:
     count = 0
 
-    if not tree_dict.get(node):
-        return count
+    q = deque()
+    q.append([node, 1])
 
+    while q:
+        n, depth = q.popleft()
+
+        if not tree_dict.get(n):
+            continue
+
+        for child in tree_dict[n]:
+            if alarms[child-1]:
+                q.append([child, depth + 1])
+
+                if authorities[child - 1] >= depth:
+                    count += 1
+        
     # 1. 자식노드 부터 시작(depth + 1)
     # 2. setup설정이 꺼져있으면 넘기기
     # 3. 세기를 확인하고 가능하면 + 1
-    for child in tree_dict[node]:
-        if alarms[child-1]:
-            count += can_alarms(child, depth + 1)
+    # for child in tree_dict[node]:
+    #     if alarms[child-1]:
+    #         count += can_alarms(child, depth + 1)
 
-            if authorities[child-1] >= depth:
-                count += 1
+    #         if authorities[child-1] >= depth:
+    #             count += 1
 
     return count
 
